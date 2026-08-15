@@ -21,6 +21,14 @@ turns on the moment you add its key.
 
 ---
 
+<p align="center">
+  <img src="docs/images/dashboard.png" alt="AIChatsHub dashboard — chat overview with customers, products and leads" width="900">
+  <br>
+  <em>The dashboard — live chat overview, customers, products, and leads at a glance.</em>
+</p>
+
+---
+
 ## Features
 
 - **AI auto-reply** — Gemini answers customer messages from your uploaded Q&A
