@@ -1,0 +1,43 @@
+.customers-page {
+  padding: 24px;
+}
+
+.customers-header {
+  margin-bottom: 24px;
+}
+
+.customers-card {
+  border-radius: 12px;
+}
+
+.customers-toolbar {
+  margin-bottom: 16px;
+}
+
+.customer-cell {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.customer-profile {
+  text-align: center;
+}
+
+.profile-top {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.profile-details .ant-list-item {
+  display: flex;
+  justify-content: space-between;
+}
+
+.last-message-card {
+  text-align: left;
+  margin-top: 16px;
+  background: #f9fafb;
+}

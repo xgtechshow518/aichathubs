@@ -1,0 +1,32 @@
+# ---- Secrets / local env (NEVER commit) ----
+.env
+.env.*
+!.env.example
+backend/.env
+backend/.env.*
+!backend/.env.example
+frontend/.env
+frontend/.env.*
+!frontend/.env.example
+
+# ---- Backend (Go) ----
+backend/server
+backend/aichatshub
+backend/aichatshub.zip
+backend/*.exe
+# WhatsApp session store (SQLite) + WAL/SHM sidecars
+backend/whatsapp_sessions.db
+backend/*.db
+backend/*.db-shm
+backend/*.db-wal
+
+# ---- Frontend (Node) ----
+frontend/node_modules/
+frontend/dist/
+frontend/.vite/
+node_modules/
+
+# ---- Misc ----
+*.log
+.DS_Store
+Thumbs.db

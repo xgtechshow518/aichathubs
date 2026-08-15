@@ -1,0 +1,93 @@
+# AIChatsHub - local Docker environment
+#
+# Compose project name "aichathubs" -> Docker Desktop shows a single
+# "aichathubs" group with the three child containers:
+#   aichathubs-db  /  aichathubs-backend  /  aichathubs-frontend
+#
+# Host ports are chosen to avoid clashes with other containers already
+# running on this machine (5432 / 8080 / 8081 were taken):
+#   Postgres  -> localhost:5433
+#   Backend   -> localhost:8082
+#   Frontend  -> localhost:5173
+name: aichathubs
+
+services:
+  # ---- Database -------------------------------------------------------
+  db:
+    image: postgres:16-alpine
+    container_name: aichathubs-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: smart_live_chats
+    ports:
+      - "5433:5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d smart_live_chats"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+    networks:
+      - aichathubs
+
+  # ---- Backend (Go / Echo) -------------------------------------------
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: aichathubs-backend
+    # Secrets (Gemini / Stripe / Google / SMTP / JWT / admin) come from
+    # backend/.env; the values below override host/network specifics.
+    env_file:
+      - ./backend/.env
+    environment:
+      SERVER_PORT: "8081"
+      LISTEN_HOST: "0.0.0.0"
+      DATABASE_URL: "postgres://postgres:postgres@db:5432/smart_live_chats?sslmode=disable"
+      FRONTEND_URL: "http://localhost:5173"
+      CORS_ORIGINS: "http://localhost:5173,http://127.0.0.1:5173"
+      GOOGLE_REDIRECT_URL: "http://localhost:8082/api/auth/google/callback"
+      WHATSAPP_DB_PATH: "file:/data/whatsapp_sessions.db?_foreign_keys=on"
+    ports:
+      - "8082:8081"
+    volumes:
+      - wa-data:/data
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - aichathubs
+
+  # ---- Frontend (React / Vite dev server) ----------------------------
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev
+    container_name: aichathubs-frontend
+    environment:
+      # Browser-facing URLs -> published backend port on the host.
+      # These override any frontend/.env values (Vite gives process.env
+      # precedence over .env files).
+      VITE_API_URL: "http://localhost:8082"
+      VITE_WS_URL: "ws://localhost:8082"
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    depends_on:
+      - backend
+    networks:
+      - aichathubs
+
+volumes:
+  db-data:
+  wa-data:
+
+networks:
+  aichathubs:
+    name: aichathubs

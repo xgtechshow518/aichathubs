@@ -1,0 +1,18 @@
+# Secrets & runtime data are provided at runtime (compose env_file / volumes),
+# never baked into the image.
+.env
+.env.production
+
+# Local WhatsApp session store (recreated on a volume)
+whatsapp_sessions.db
+*.db
+
+# Prebuilt artifacts / archives
+aichatshub
+aichatshub.zip
+server
+
+# VCS / docs
+.git
+.gitignore
+*.md

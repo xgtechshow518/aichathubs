@@ -1,0 +1,116 @@
+.reports-page {
+  padding: 24px;
+}
+
+.reports-header {
+  margin-bottom: 24px;
+}
+
+.stats-row {
+  margin-bottom: 16px;
+}
+
+.stat-card {
+  border-radius: 12px;
+}
+
+.report-card {
+  border-radius: 12px;
+  height: 100%;
+}
+
+/* Daily Chart */
+.daily-chart {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.chart-bar-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.chart-label {
+  width: 120px;
+  flex-shrink: 0;
+  font-size: 13px;
+}
+
+.chart-bar-container {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.chart-bar {
+  height: 24px;
+  background: linear-gradient(90deg, #3b82f6, #60a5fa);
+  border-radius: 6px;
+  min-width: 4px;
+  transition: width 0.5s ease;
+}
+
+.chart-value {
+  font-weight: 600;
+  font-size: 13px;
+  color: #6b7280;
+}
+
+/* Auto-Reply Rate */
+.reply-rate {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 16px 0;
+}
+
+.rate-label {
+  margin-top: 12px;
+  text-align: center;
+}
+
+.rate-breakdown {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.rate-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.rate-item > span:last-child {
+  margin-left: auto;
+}
+
+.rate-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* Platform Breakdown */
+.platform-breakdown {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.platform-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.platform-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}

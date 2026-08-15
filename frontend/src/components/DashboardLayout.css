@@ -1,0 +1,22 @@
+.loading-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background: #f5f7fa;
+}
+
+.dashboard-layout {
+  min-height: 100vh;
+}
+
+.main-layout {
+  margin-left: 220px;
+  min-height: 100vh;
+}
+
+.main-content {
+  background: #f5f7fa;
+  min-height: 100vh;
+}
+
