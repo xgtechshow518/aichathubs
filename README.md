@@ -1,5 +1,7 @@
 # AIChatsHub 💬🤖
 
+<p align="right"><b>English</b> | <a href="README.zh-CN.md">简体中文</a></p>
+
 > **Open-Source, Self-Hostable AI Customer Chat & Lead Generation Platform**
 
 **AIChatsHub** is an all-in-one, self-hosted AI customer support platform. Connect your WhatsApp business line, upload custom knowledge bases, and let an intelligent AI assistant handle inquiries, showcase your product catalog, and capture qualified leads 24/7 — with seamless live human agent handoff.

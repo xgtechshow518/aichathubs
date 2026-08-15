@@ -72,7 +72,10 @@ rotate it immediately.
    (`npm run lint` in `frontend/`). For the backend, run `go build ./...` and
    `go vet ./...` and make sure it compiles cleanly.
 4. Update documentation (README, `.env.example`, comments) if your change
-   affects configuration or behavior.
+   affects configuration or behavior. If you edit `README.md`, please also
+   update the Simplified Chinese translation `README.zh-CN.md` (or note in your
+   PR that it needs updating). The **English `README.md` is the source of
+   truth** — translations may lag.
 5. **Sign off your commits** (see below).
 6. Open the PR against `main` with a clear description of *what* changed and
    *why*.
