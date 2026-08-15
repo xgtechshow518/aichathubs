@@ -1,13 +1,16 @@
-# AIChatsHub
+# AIChatsHub 💬🤖
 
-Self-hostable AI customer-chat platform. Connect a WhatsApp number, upload a
-knowledge base, and let a Gemini-powered assistant auto-reply to your
-customers — with a live agent dashboard, product catalog, and lead capture.
+> **Open-Source, Self-Hostable AI Customer Chat & Lead Generation Platform**
+
+**AIChatsHub** is an all-in-one, self-hosted AI customer support platform. Connect your WhatsApp business line, upload custom knowledge bases, and let an intelligent AI assistant handle inquiries, showcase your product catalog, and capture qualified leads 24/7 — with seamless live human agent handoff.
 
 Built with **Go (Echo)** + **React (Vite)** + **PostgreSQL**. Bring your own
 credentials: nothing is hardcoded, and the app runs happily with only a
 database configured — every integration (AI, email, social login, billing)
 turns on the moment you add its key.
+
+---
+
 
 > **Heads up:** this repo ships **no secrets**. Every deployment supplies its
 > own keys via `.env` files (git-ignored). See [Configuration](#configuration).
