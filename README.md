@@ -12,6 +12,11 @@ turns on the moment you add its key.
 > **Heads up:** this repo ships **no secrets**. Every deployment supplies its
 > own keys via `.env` files (git-ignored). See [Configuration](#configuration).
 
+> 💼 **Don't want to self-host?** The software is free forever — but if you'd
+> rather not manage servers, I offer paid **setup, managed hosting, and
+> maintenance**. See [Services & Support](#services--support) or email
+> [hello@awkiss.com](mailto:hello@awkiss.com).
+
 ---
 
 ## Features
@@ -234,6 +239,40 @@ aichathubs/
 - Change `JWT_SECRET` and `ADMIN_PASSWORD` from their defaults before exposing
   the server (the backend warns you at startup while they're default).
 - Treat any key that has ever been committed as compromised — rotate it.
+
+## Services & Support
+
+**AIChatsHub is free and open source — and always will be.** You can self-host
+it yourself using the guide above at no cost.
+
+That said, deploying and running a production chat platform (server, domain,
+SSL, WhatsApp linking, API keys, updates, backups) takes time. If you'd rather
+skip the setup or need it maintained, I offer paid services:
+
+| Service | What it covers |
+|---|---|
+| **Setup & installation** | Deploy on your server or VPS — domain, SSL, WhatsApp linking, Gemini/SMTP/OAuth keys wired up and tested |
+| **Managed hosting** | I host and run it for you — updates, backups, monitoring, uptime |
+| **Maintenance & updates** | Keep it patched and current: dependency upgrades, security fixes, breakage repair |
+| **Customization** | New features, custom branding, and integrations tailored to your business |
+| **Priority support** | Direct assistance with faster response times |
+
+Pricing is quoted per request based on your needs — get in touch:
+
+📧 **[hello@awkiss.com](mailto:hello@awkiss.com)**
+
+> Self-hosting stays 100% free. Paid services are an optional convenience for
+> teams who'd rather not manage servers themselves.
+
+## Sponsor
+
+If this project saves you time and you'd like to support its continued
+development, sponsorships are appreciated (but never required):
+
+- ❤️ [GitHub Sponsors](https://github.com/sponsors/xgtechshow518)
+- ☕ [Buy Me a Coffee](https://buymeacoffee.com/xgtechshowl)
+
+---
 
 ## Acknowledgments & third-party notices
 
