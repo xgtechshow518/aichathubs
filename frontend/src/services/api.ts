@@ -19,6 +19,7 @@ export interface PublicConfig {
 
 class ApiService {
   private client: AxiosInstance;
+  private publicConfigCache?: Promise<PublicConfig>;
 
   constructor() {
     this.client = axios.create({
@@ -65,10 +66,20 @@ class ApiService {
     );
   }
 
-  // Public server metadata (no auth required)
+  // Public server metadata (no auth required). Cached for the app's lifetime —
+  // these flags are constant per deployment; failures are not cached so a
+  // transient error can be retried on the next call.
   async getPublicConfig(): Promise<PublicConfig> {
-    const response = await this.client.get('/config');
-    return response.data;
+    if (!this.publicConfigCache) {
+      this.publicConfigCache = this.client
+        .get('/config')
+        .then((r) => r.data as PublicConfig)
+        .catch((e) => {
+          this.publicConfigCache = undefined;
+          throw e;
+        });
+    }
+    return this.publicConfigCache;
   }
 
   // Auth endpoints

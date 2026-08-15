@@ -23,7 +23,10 @@ export default function Login() {
   useEffect(() => {
     api.getPublicConfig()
       .then((cfg) => setShowGoogle(cfg.googleAuth && !!GOOGLE_CLIENT_ID))
-      .catch(() => setShowGoogle(false));
+      // Fail open: if the config call can't be reached, fall back to the
+      // build-time client ID so a working Google login isn't hidden by a
+      // transient fetch error (the backend still 503s if truly unconfigured).
+      .catch(() => setShowGoogle(!!GOOGLE_CLIENT_ID));
   }, []);
 
   // StrictMode (dev) mounts effects twice. OAuth codes are single-use on

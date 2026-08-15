@@ -190,6 +190,9 @@ func (c *Config) LogStartupSummary() {
 	log.Printf("  Billing (Stripe):       %s", onOff(c.BillingEnabled && c.StripeConfigured()))
 	if !c.SMTPConfigured() {
 		log.Println("  → No SMTP: new users are auto-verified on signup (no email sent).")
+		if c.SMTPHost != "" || c.SMTPUser != "" || c.SMTPPassword != "" || c.SMTPFrom != "" {
+			log.Println("  WARNING: SMTP is only PARTIALLY set (need all of SMTP_HOST/USER/PASS/FROM) — email verification is OFF and signups are auto-verified. Check for a missing/typo'd SMTP_* var.")
+		}
 	}
 	if !c.BillingEnabled {
 		log.Println("  → Billing off: unlimited WhatsApp devices, no subscription gate.")

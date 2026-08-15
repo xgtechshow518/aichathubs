@@ -290,31 +290,32 @@ func (h *AuthHandler) Register(c echo.Context) error {
 
 	var existing models.User
 	if result := database.DB.Where("email = ?", req.Email).First(&existing); result.Error == nil {
-		if existing.EmailVerified {
+		// An account already exists. When auto-verify is on there is no emailed
+		// code to prove the requester owns this email, so we must NOT overwrite
+		// its password or verify it from an unauthenticated request — doing so
+		// would let anyone take over an existing unverified account. Treat
+		// verified and unverified the same in that mode.
+		if existing.EmailVerified || autoVerify {
 			return echo.NewHTTPError(http.StatusConflict, "email already registered")
 		}
-		// Unverified account exists — update password and re-run verification.
+
+		// SMTP configured: ownership is proven by the emailed code, so it is
+		// safe to update the password and re-send verification for an
+		// unverified account.
 		hashed, err := bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)
 		if err != nil {
 			return echo.NewHTTPError(http.StatusInternalServerError, "failed to process password")
 		}
+		code := generateVerifyCode()
+		expiry := time.Now().Add(10 * time.Minute)
 		existing.Password = string(hashed)
 		existing.Name = req.Name
 		existing.Provider = "email"
-
-		if autoVerify {
-			existing.EmailVerified = true
-			existing.VerifyCode = ""
-			existing.VerifyExpiry = nil
-			database.DB.Save(&existing)
-			return h.authSuccess(c, &existing, http.StatusOK)
-		}
-
-		code := generateVerifyCode()
-		expiry := time.Now().Add(10 * time.Minute)
 		existing.VerifyCode = code
 		existing.VerifyExpiry = &expiry
-		database.DB.Save(&existing)
+		if err := database.DB.Save(&existing).Error; err != nil {
+			return echo.NewHTTPError(http.StatusInternalServerError, "failed to update account")
+		}
 
 		if err := h.emailService.SendVerificationCode(req.Email, code); err != nil {
 			fmt.Printf("SMTP error: %v\n", err)
