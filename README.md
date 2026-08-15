@@ -18,8 +18,10 @@ turns on the moment you add its key.
 
 - **AI auto-reply** — Gemini answers customer messages from your uploaded Q&A
   knowledge base and product catalog.
-- **WhatsApp integration** — link one or more numbers via QR code
-  ([whatsmeow](https://github.com/tulir/whatsmeow), no third-party API).
+- **WhatsApp integration** — link one or more numbers via QR code. Powered by
+  the third-party open-source library
+  [whatsmeow](https://github.com/tulir/whatsmeow) (a Go WhatsApp Web multidevice
+  client) — no official WhatsApp Business API or paid gateway required.
 - **Live agent dashboard** — real-time chat via WebSocket, take over from the
   bot, tag conversations, blacklist contacts.
 - **Product catalog & leads** — import products, the bot recommends them and
@@ -232,6 +234,24 @@ aichathubs/
 - Change `JWT_SECRET` and `ADMIN_PASSWORD` from their defaults before exposing
   the server (the backend warns you at startup while they're default).
 - Treat any key that has ever been committed as compromised — rotate it.
+
+## Acknowledgments & third-party notices
+
+WhatsApp connectivity is provided entirely by the third-party open-source
+library **[whatsmeow](https://github.com/tulir/whatsmeow)** (MPL-2.0), an
+unofficial Go client for WhatsApp Web multidevice. This project is **not
+affiliated with, endorsed by, or sponsored by WhatsApp or Meta**. "WhatsApp"
+is a trademark of Meta Platforms, Inc.
+
+Using an unofficial client may violate WhatsApp's Terms of Service and can lead
+to your number being rate-limited or banned. You are responsible for how you use
+it — prefer a dedicated/test number and comply with all applicable laws and
+WhatsApp's terms.
+
+Other notable open-source dependencies: [Echo](https://echo.labstack.com/),
+[GORM](https://gorm.io/), [React](https://react.dev/),
+[Ant Design](https://ant.design/), and the
+[Google Gemini API](https://ai.google.dev/).
 
 ## License
 
