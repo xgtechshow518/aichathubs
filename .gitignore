@@ -26,6 +26,9 @@ frontend/dist/
 frontend/.vite/
 node_modules/
 
+# ---- Editor / tooling ----
+.cursor/plans/
+
 # ---- Misc ----
 *.log
 .DS_Store
