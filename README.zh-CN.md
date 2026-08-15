@@ -21,6 +21,14 @@
 
 ---
 
+<p align="center">
+  <img src="docs/images/dashboard.png" alt="AIChatsHub 控制台——聊天概览、客户、产品与销售线索" width="900">
+  <br>
+  <em>控制台——一览实时聊天、客户、产品与销售线索。</em>
+</p>
+
+---
+
 ## 功能特性
 
 - **AI 自动回复**——Gemini 根据你上传的问答知识库和产品目录回答客户消息。
@@ -44,6 +52,38 @@
 | **AI** | Google Gemini（默认 `gemini-3.7-flash`） |
 | **WhatsApp** | whatsmeow（会话存储于 SQLite） |
 | **计费** | Stripe（可选） |
+
+---
+
+## 系统要求
+
+AIChatsHub 很轻量——AI 运行在 Google 的服务器上（通过 Gemini API），因此
+**无需 GPU、无需高性能本地算力**。一台小型 VPS 就足以支撑单个商家。
+
+| | 最低（测试） | 推荐（生产） |
+|---|---|---|
+| **CPU** | 1 vCPU | 2 vCPU |
+| **内存** | 2 GB | 4 GB |
+| **存储** | 10 GB SSD | 20 GB+ SSD（随聊天记录与媒体增长） |
+| **网络** | 稳定宽带；出站 HTTPS 访问 Google/Stripe/SMTP，以及一条持久的 WhatsApp 连接 | 同左 |
+
+### 操作系统
+
+任何能运行 **Docker Engine + Compose v2** 的系统皆可：
+
+- **Linux**——生产服务器推荐 **Ubuntu 22.04 LTS 或更高版本**（或 Debian）。
+- **Windows**——Windows 10/11 + Docker Desktop（WSL 2 后端）。非常适合本地开发。
+- **macOS**——12 及以上 + Docker Desktop，用于本地开发。
+
+> **说明**
+> - **仅支持 64 位。** 同时支持 `x86_64`（amd64）和 `arm64`（Apple 芯片、ARM
+>   架构 VPS、树莓派 4/5）。
+> - **不使用 Docker** 运行（参见[手动部署](#手动部署不使用-docker)）时，需要相同
+>   的硬件配置，并额外直接安装 Go 1.26+、Node.js 20.19+ 和 PostgreSQL 16+。
+> - 存储占用会随对话历史以及机器人处理的媒体文件逐步增长——消息量大时请预留更多
+>   磁盘空间。
+> - 面向公网/生产部署时，请将应用置于启用 **HTTPS** 的反向代理之后
+>   （如 Nginx 或 Caddy），并使用域名。
 
 ---
 
