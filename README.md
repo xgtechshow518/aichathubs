@@ -61,6 +61,42 @@ turns on the moment you add its key.
 
 ---
 
+## System requirements
+
+AIChatsHub is lightweight — the AI runs on Google's servers (via the Gemini
+API), so **no GPU and no heavy local compute** are needed. A small VPS is enough
+for a single business.
+
+| | Minimum (testing) | Recommended (production) |
+|---|---|---|
+| **CPU** | 1 vCPU | 2 vCPU |
+| **RAM** | 2 GB | 4 GB |
+| **Storage** | 10 GB SSD | 20 GB+ SSD (grows with chat history & media) |
+| **Network** | Stable broadband; outbound HTTPS to Google/Stripe/SMTP + a persistent WhatsApp connection | Same |
+
+### Operating system
+
+Anything that runs **Docker Engine + Compose v2** works:
+
+- **Linux** — **Ubuntu 22.04 LTS or later** (or Debian) is the recommended
+  choice for production servers.
+- **Windows** — Windows 10/11 with Docker Desktop (WSL 2 backend). Great for
+  local development.
+- **macOS** — 12+ with Docker Desktop, for local development.
+
+> **Notes**
+> - **64-bit only.** Both `x86_64` (amd64) and `arm64` (Apple Silicon, ARM VPS,
+>   Raspberry Pi 4/5) are supported.
+> - Running **without Docker** (see [Manual setup](#manual-setup-without-docker))
+>   needs the same specs plus Go 1.26+, Node.js 20.19+, and PostgreSQL 16+
+>   installed directly.
+> - Storage use grows over time with conversation history and any media the bot
+>   handles — budget more disk for high message volume.
+> - For public/production deployments, put the app behind a reverse proxy with
+>   **HTTPS** (e.g. Nginx or Caddy) and use a domain name.
+
+---
+
 ## Quick start (Docker)
 
 The fastest way to run the whole stack — Postgres, backend, and frontend — is
