@@ -257,12 +257,20 @@ skip the setup or need it maintained, I offer paid services:
 | **Customization** | New features, custom branding, and integrations tailored to your business |
 | **Priority support** | Direct assistance with faster response times |
 
-Pricing is quoted per request based on your needs — get in touch:
+Get in touch:
 
 📧 **[hello@awkiss.com](mailto:hello@awkiss.com)**
 
 > Self-hosting stays 100% free. Paid services are an optional convenience for
 > teams who'd rather not manage servers themselves.
+
+## Contributing
+
+Contributions are welcome! Bug reports, feature ideas, and pull requests all
+help. Please read the [Contributing Guide](CONTRIBUTING.md) before you start —
+it covers the workflow, coding checks, and the lightweight sign-off (DCO) we
+require on commits. All participation is governed by our
+[Code of Conduct](CODE_OF_CONDUCT.md).
 
 ## Sponsor
 
