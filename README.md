@@ -98,6 +98,21 @@ database and WhatsApp session volumes).
   `ADMIN_PASSWORD`). **Change them before exposing the server** — the backend
   prints a warning at startup while they're still default.
 
+### Load demo data (optional)
+
+To explore the admin panel and dashboards with realistic sample data
+(operators, chats, products, leads, customers), load the demo seed into a
+**fresh** database:
+
+```bash
+docker cp scripts/seed_demo.sql aichathubs-db:/tmp/seed_demo.sql
+docker exec aichathubs-db psql -U postgres -d smart_live_chats -v ON_ERROR_STOP=1 -f /tmp/seed_demo.sql
+```
+
+It creates a demo operator login `demo@aichathubs.local` / `demo123456`. See
+[`scripts/README.md`](scripts/README.md) for details. **Demo data only — never
+load it into a real deployment.**
+
 ### Ports already in use?
 
 If `5432`, `8080`, or `5173` are taken on your machine, copy the root port
