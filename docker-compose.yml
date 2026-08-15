@@ -1,14 +1,13 @@
-# AIChatsHub - local Docker environment
+# AIChatsHub — local Docker environment
 #
 # Compose project name "aichathubs" -> Docker Desktop shows a single
 # "aichathubs" group with the three child containers:
 #   aichathubs-db  /  aichathubs-backend  /  aichathubs-frontend
 #
-# Host ports are chosen to avoid clashes with other containers already
-# running on this machine (5432 / 8080 / 8081 were taken):
-#   Postgres  -> localhost:5433
-#   Backend   -> localhost:8082
-#   Frontend  -> localhost:5173
+# Published host ports default to the standard 5432 / 8080 / 5173 and can be
+# overridden from a git-ignored root .env file (see .env.example) if those
+# ports are already in use on your machine:
+#   DB_PORT / BACKEND_PORT / FRONTEND_PORT
 name: aichathubs
 
 services:
@@ -21,7 +20,7 @@ services:
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: smart_live_chats
     ports:
-      - "5433:5432"
+      - "${DB_PORT:-5432}:5432"
     volumes:
       - db-data:/var/lib/postgresql/data
     healthcheck:
@@ -40,19 +39,20 @@ services:
       dockerfile: Dockerfile
     container_name: aichathubs-backend
     # Secrets (Gemini / Stripe / Google / SMTP / JWT / admin) come from
-    # backend/.env; the values below override host/network specifics.
+    # backend/.env; the values below override host/network specifics so the
+    # containers can talk to each other regardless of published ports.
     env_file:
       - ./backend/.env
     environment:
       SERVER_PORT: "8081"
       LISTEN_HOST: "0.0.0.0"
       DATABASE_URL: "postgres://postgres:postgres@db:5432/smart_live_chats?sslmode=disable"
-      FRONTEND_URL: "http://localhost:5173"
-      CORS_ORIGINS: "http://localhost:5173,http://127.0.0.1:5173"
-      GOOGLE_REDIRECT_URL: "http://localhost:8082/api/auth/google/callback"
+      FRONTEND_URL: "http://localhost:${FRONTEND_PORT:-5173}"
+      CORS_ORIGINS: "http://localhost:${FRONTEND_PORT:-5173},http://127.0.0.1:${FRONTEND_PORT:-5173}"
+      GOOGLE_REDIRECT_URL: "http://localhost:${BACKEND_PORT:-8080}/api/auth/google/callback"
       WHATSAPP_DB_PATH: "file:/data/whatsapp_sessions.db?_foreign_keys=on"
     ports:
-      - "8082:8081"
+      - "${BACKEND_PORT:-8080}:8081"
     volumes:
       - wa-data:/data
     depends_on:
@@ -69,13 +69,13 @@ services:
       dockerfile: Dockerfile.dev
     container_name: aichathubs-frontend
     environment:
-      # Browser-facing URLs -> published backend port on the host.
+      # Browser-facing URLs -> the backend's published host port.
       # These override any frontend/.env values (Vite gives process.env
       # precedence over .env files).
-      VITE_API_URL: "http://localhost:8082"
-      VITE_WS_URL: "ws://localhost:8082"
+      VITE_API_URL: "http://localhost:${BACKEND_PORT:-8080}"
+      VITE_WS_URL: "ws://localhost:${BACKEND_PORT:-8080}"
     ports:
-      - "5173:5173"
+      - "${FRONTEND_PORT:-5173}:5173"
     volumes:
       - ./frontend:/app
       - /app/node_modules

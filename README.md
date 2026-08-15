@@ -1,211 +1,238 @@
 # AIChatsHub
 
-A modern admin portal for managing customer conversations across multiple social media platforms. Built with React (frontend) and Go (backend).
+Self-hostable AI customer-chat platform. Connect a WhatsApp number, upload a
+knowledge base, and let a Gemini-powered assistant auto-reply to your
+customers — with a live agent dashboard, product catalog, and lead capture.
+
+Built with **Go (Echo)** + **React (Vite)** + **PostgreSQL**. Bring your own
+credentials: nothing is hardcoded, and the app runs happily with only a
+database configured — every integration (AI, email, social login, billing)
+turns on the moment you add its key.
+
+> **Heads up:** this repo ships **no secrets**. Every deployment supplies its
+> own keys via `.env` files (git-ignored). See [Configuration](#configuration).
+
+---
 
 ## Features
 
-- **Social Login**: Google and Facebook OAuth 2.0 authentication
-- **Dashboard**: Overview of chat statistics and recent conversations
-- **Chat History**: Real-time chat interface with WebSocket support
-- **Multi-platform**: Support for WhatsApp, Facebook Messenger, and more
+- **AI auto-reply** — Gemini answers customer messages from your uploaded Q&A
+  knowledge base and product catalog.
+- **WhatsApp integration** — link one or more numbers via QR code
+  ([whatsmeow](https://github.com/tulir/whatsmeow), no third-party API).
+- **Live agent dashboard** — real-time chat via WebSocket, take over from the
+  bot, tag conversations, blacklist contacts.
+- **Product catalog & leads** — import products, the bot recommends them and
+  captures leads.
+- **Auth** — email/password (with optional email verification) plus optional
+  Google / Facebook social login.
+- **Optional billing** — Stripe per-connected-device subscriptions, off by
+  default (fully free when self-hosted).
+- **Admin panel** — manage users, devices, subscriptions, and the global bot
+  prompt.
 
-## Tech Stack
+## Tech stack
 
-### Frontend
-- React 18 with TypeScript
-- Ant Design for UI components
-- React Router for navigation
-- Zustand for state management
-- Axios for HTTP requests
-- WebSocket for real-time updates
+| | |
+|---|---|
+| **Frontend** | React 19 · TypeScript · Vite 7 · Ant Design · Zustand · Axios |
+| **Backend** | Go 1.25 · Echo v4 · GORM · JWT · WebSocket |
+| **Database** | PostgreSQL 16 (`pg_trgm` extension) |
+| **AI** | Google Gemini (`gemini-2.5-flash` by default) |
+| **WhatsApp** | whatsmeow (session store in SQLite) |
+| **Billing** | Stripe (optional) |
 
-### Backend
-- Go with Echo framework
-- PostgreSQL with GORM
-- JWT for authentication
-- Gorilla WebSocket for real-time communication
+---
 
-## Project Structure
+## Quick start (Docker)
+
+The fastest way to run the whole stack — Postgres, backend, and frontend — is
+Docker Compose. You need [Docker Desktop](https://www.docker.com/products/docker-desktop/)
+(or Docker Engine + Compose v2).
+
+```bash
+git clone https://github.com/xgtechshow518/aichathubs.git
+cd aichathubs
+
+# 1. Create your backend config from the template
+cp backend/.env.example backend/.env
+cp frontend/.env.example frontend/.env
+
+# 2. (Optional) edit backend/.env to add your Gemini/SMTP/OAuth/Stripe keys.
+#    It runs without them — see "Graceful degradation" below.
+
+# 3. Build and start everything
+docker compose up --build
+```
+
+Then open:
+
+| Service | URL |
+|---|---|
+| Frontend | http://localhost:5173 |
+| Backend API | http://localhost:8080 |
+| Postgres | localhost:5432 (user/pass `postgres`) |
+
+Docker Desktop shows a single **`aichathubs`** group with three child
+containers: `aichathubs-db`, `aichathubs-backend`, `aichathubs-frontend`.
+
+Stop with `Ctrl+C`, or `docker compose down` (add `-v` to also wipe the
+database and WhatsApp session volumes).
+
+### Ports already in use?
+
+If `5432`, `8080`, or `5173` are taken on your machine, copy the root port
+template and change them — Compose picks it up automatically:
+
+```bash
+cp .env.example .env   # edit DB_PORT / BACKEND_PORT / FRONTEND_PORT
+```
+
+---
+
+## Configuration
+
+All configuration is via environment variables. Two `.env` files, each with a
+committed `.env.example` template:
+
+- **`backend/.env`** — the important one: database, secrets, and all integration
+  keys. See [`backend/.env.example`](backend/.env.example) for the full,
+  documented list.
+- **`frontend/.env`** — public browser config (API URL, Google client ID). See
+  [`frontend/.env.example`](frontend/.env.example).
+- **`.env`** (root, optional) — only Docker Compose published ports.
+
+### Required vs optional
+
+| Variable(s) | Required? | Effect if unset |
+|---|---|---|
+| `DATABASE_URL` | ✅ Required | App won't start |
+| `JWT_SECRET` | ✅ Set a strong value | Insecure default (warned at startup) |
+| `ADMIN_USERNAME` / `ADMIN_PASSWORD` | ✅ Change them | Insecure default (warned at startup) |
+| `GEMINI_API_KEY` | Optional | AI auto-reply disabled |
+| `SMTP_*` | Optional | New users auto-verified (no email sent) |
+| `GOOGLE_CLIENT_ID` / `_SECRET` | Optional | "Sign in with Google" hidden |
+| `FACEBOOK_CLIENT_ID` / `_SECRET` | Optional | "Sign in with Facebook" hidden |
+| `BILLING_ENABLED` + `STRIPE_*` | Optional | Free mode: unlimited devices, no paywall |
+
+### Graceful degradation
+
+The app is designed to run with **minimal** config and light up features as you
+add keys. On startup the backend logs exactly what's on:
 
 ```
-smart-live-chats/
-├── frontend/                 # React application
-│   ├── src/
-│   │   ├── components/       # Reusable UI components
-│   │   ├── pages/            # Page components
-│   │   ├── services/         # API and WebSocket clients
-│   │   ├── store/            # Zustand stores
-│   │   ├── hooks/            # Custom hooks
-│   │   └── types/            # TypeScript types
-│   └── package.json
-├── backend/                  # Go application
-│   ├── cmd/server/           # Main entry point
-│   ├── internal/
-│   │   ├── handlers/         # HTTP and WebSocket handlers
-│   │   ├── models/           # Database models
-│   │   ├── services/         # Business logic
-│   │   ├── middleware/       # Auth, CORS middleware
-│   │   ├── database/         # DB connection
-│   │   └── config/           # Configuration
-│   └── go.mod
-└── README.md
+──────────── AIChatsHub configuration ────────────
+  AI assistant (Gemini):  disabled
+  Email verification:     disabled
+  Google login:           disabled
+  Facebook login:         disabled
+  Billing (Stripe):       disabled
+  → No SMTP: new users are auto-verified on signup (no email sent).
+  → Billing off: unlimited WhatsApp devices, no subscription gate.
+──────────────────────────────────────────────────
 ```
 
-## Getting Started
+The frontend queries `GET /api/config` (booleans only, no secrets) to know
+which login buttons to show.
 
-### Prerequisites
+### Where to get each credential
 
-- Node.js 18+ and npm
-- Go 1.21+
-- PostgreSQL 14+
+| Key | Where |
+|---|---|
+| **Gemini API key** | https://aistudio.google.com/apikey |
+| **Google OAuth** | https://console.cloud.google.com/apis/credentials — add redirect URIs `http://localhost:5173/login` and `http://localhost:8080/api/auth/google/callback` |
+| **SMTP (Gmail)** | App Password at https://myaccount.google.com/apppasswords |
+| **Stripe** | https://dashboard.stripe.com/apikeys (secret key + a subscription Price ID + webhook secret) |
 
-### Database Setup
+---
 
-1. Create a PostgreSQL database:
+## Billing modes
+
+- **Free (default)** — `BILLING_ENABLED=false`. No Stripe needed. Users get
+  unlimited WhatsApp devices and full access; the subscription gate is off.
+- **Paid** — `BILLING_ENABLED=true` + Stripe keys + a `STRIPE_PRICE_STARTER`
+  price ID. Users are charged per connected WhatsApp device (Stripe
+  subscription quantity), with a device limit enforced at connect time.
+
+---
+
+## Manual setup (without Docker)
+
+<details>
+<summary>Prerequisites: Go 1.25+, Node.js 20+, PostgreSQL 16+</summary>
+
+**Database**
 
 ```sql
 CREATE DATABASE smart_live_chats;
 ```
 
-### Backend Setup
-
-1. Navigate to the backend directory:
+**Backend**
 
 ```bash
 cd backend
+cp .env.example .env      # set DATABASE_URL to your local Postgres
+go mod download
+go run ./cmd/server       # serves on http://localhost:8080
 ```
 
-2. Copy the environment file and configure it:
-
-```bash
-cp env.example .env
-```
-
-3. Update the `.env` file with your settings:
-
-```env
-DATABASE_URL=postgres://user:password@localhost:5432/smart_live_chats?sslmode=disable
-JWT_SECRET=your-secret-key
-GOOGLE_CLIENT_ID=your-google-client-id
-GOOGLE_CLIENT_SECRET=your-google-client-secret
-FACEBOOK_CLIENT_ID=your-facebook-app-id
-FACEBOOK_CLIENT_SECRET=your-facebook-app-secret
-```
-
-4. Download dependencies and run:
-
-```bash
-go mod tidy
-go run cmd/server/main.go
-```
-
-The backend will start on `http://localhost:8080`.
-
-### Frontend Setup
-
-1. Navigate to the frontend directory:
+**Frontend**
 
 ```bash
 cd frontend
-```
-
-2. Install dependencies:
-
-```bash
+cp .env.example .env      # set VITE_API_URL=http://localhost:8080
 npm install
+npm run dev               # serves on http://localhost:5173
 ```
 
-3. Copy the environment file and configure it:
+</details>
 
-```bash
-cp env.example .env
+---
+
+## Admin panel
+
+A separate admin login lives at `/admin/login` (frontend) backed by
+`ADMIN_USERNAME` / `ADMIN_PASSWORD`. From there you can manage users, devices,
+subscriptions, the global bot system-prompt, and AI reply-delay settings.
+
+---
+
+## Project structure
+
+```
+aichathubs/
+├── backend/                  # Go (Echo) API
+│   ├── cmd/server/           # entry point
+│   ├── internal/
+│   │   ├── handlers/         # HTTP + WebSocket handlers
+│   │   ├── models/           # GORM models
+│   │   ├── gemini/           # AI service
+│   │   ├── whatsapp/         # whatsmeow manager
+│   │   ├── middleware/       # JWT, admin, subscription
+│   │   ├── database/         # DB connection + migrations
+│   │   ├── email/            # SMTP verification codes
+│   │   └── config/           # env config + startup summary
+│   ├── Dockerfile
+│   └── .env.example
+├── frontend/                 # React (Vite) app
+│   ├── src/{pages,components,services,store,types}
+│   ├── Dockerfile.dev
+│   └── .env.example
+├── docker-compose.yml
+├── .env.example              # Docker port overrides
+└── LICENSE
 ```
 
-4. Update the `.env` file:
+---
 
-```env
-VITE_API_URL=http://localhost:8080
-VITE_WS_URL=ws://localhost:8080
-VITE_GOOGLE_CLIENT_ID=your-google-client-id
-VITE_FACEBOOK_APP_ID=your-facebook-app-id
-```
+## Security
 
-5. Start the development server:
-
-```bash
-npm run dev
-```
-
-The frontend will start on `http://localhost:5173`.
-
-## OAuth Setup
-
-### Google OAuth
-
-1. Go to [Google Cloud Console](https://console.cloud.google.com/)
-2. Create a new project or select existing
-3. Enable Google+ API
-4. Go to Credentials → Create Credentials → OAuth 2.0 Client IDs
-5. Add authorized redirect URIs:
-   - `http://localhost:5173/login` (development)
-   - `http://localhost:8080/api/auth/google/callback` (backend)
-
-### Facebook OAuth
-
-1. Go to [Facebook Developers](https://developers.facebook.com/)
-2. Create a new app or select existing
-3. Add Facebook Login product
-4. Configure OAuth redirect URIs:
-   - `http://localhost:5173/login` (development)
-   - `http://localhost:8080/api/auth/facebook/callback` (backend)
-
-## API Endpoints
-
-### Authentication
-- `GET /api/auth/google` - Get Google OAuth URL
-- `POST /api/auth/google/callback` - Google OAuth callback
-- `GET /api/auth/facebook` - Get Facebook OAuth URL
-- `POST /api/auth/facebook/callback` - Facebook OAuth callback
-- `GET /api/auth/me` - Get current user (requires auth)
-
-### Chats
-- `GET /api/chats` - List chat sessions
-- `GET /api/chats/stats` - Get chat statistics
-- `GET /api/chats/:id` - Get single chat session
-- `GET /api/chats/:id/messages` - Get chat messages
-- `POST /api/chats/:id/messages` - Send a message
-- `POST /api/chats/:id/read` - Mark messages as read
-
-### WebSocket
-- `GET /ws` - WebSocket connection for real-time updates
-
-## Development
-
-### Running Tests
-
-```bash
-# Backend tests
-cd backend
-go test ./...
-
-# Frontend tests
-cd frontend
-npm test
-```
-
-### Building for Production
-
-```bash
-# Backend
-cd backend
-go build -o server cmd/server/main.go
-
-# Frontend
-cd frontend
-npm run build
-```
+- **Never commit `.env` files.** They are git-ignored; only `.env.example`
+  templates are tracked.
+- Change `JWT_SECRET` and `ADMIN_PASSWORD` from their defaults before exposing
+  the server (the backend warns you at startup while they're default).
+- Treat any key that has ever been committed as compromised — rotate it.
 
 ## License
 
-MIT
-
+[MIT](LICENSE) © 2026 AIChatsHub
