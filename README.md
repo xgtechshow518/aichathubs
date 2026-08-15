@@ -212,6 +212,19 @@ A separate admin login lives at `/admin/login` (frontend) backed by
 `ADMIN_USERNAME` / `ADMIN_PASSWORD`. From there you can manage users, devices,
 subscriptions, the global bot system-prompt, and AI reply-delay settings.
 
+📖 See the **[Admin Guide](docs/admin-guide.md)** for a full walkthrough of
+every admin panel section.
+
+---
+
+## Documentation
+
+- **[Admin Guide](docs/admin-guide.md)** — operating the admin panel: users,
+  devices, subscriptions, bot prompt, reply delay, and system health.
+- **[Configuration](#configuration)** — all environment variables and where to
+  get each credential.
+- **[Contributing Guide](CONTRIBUTING.md)** · **[Code of Conduct](CODE_OF_CONDUCT.md)**
+
 ---
 
 ## Project structure
