@@ -38,7 +38,7 @@ turns on the moment you add its key.
 | **Frontend** | React 19 · TypeScript · Vite 7 · Ant Design · Zustand · Axios |
 | **Backend** | Go 1.26 · Echo v4 · GORM · JWT · WebSocket |
 | **Database** | PostgreSQL 16 (`pg_trgm` extension) |
-| **AI** | Google Gemini (`gemini-2.5-flash` by default) |
+| **AI** | Google Gemini (`gemini-3.7-flash` by default) |
 | **WhatsApp** | whatsmeow (session store in SQLite) |
 | **Billing** | Stripe (optional) |
 

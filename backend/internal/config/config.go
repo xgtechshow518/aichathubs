@@ -98,7 +98,7 @@ func Load() *Config {
 		StripePriceEnterprise: getEnv("STRIPE_PRICE_ENTERPRISE", ""),
 		BillingEnabled:        getEnvBool("BILLING_ENABLED", false),
 		GeminiAPIKey:          getEnv("GEMINI_API_KEY", ""),
-		GeminiModel:           getEnv("GEMINI_MODEL", "gemini-2.5-flash"),
+		GeminiModel:           getEnv("GEMINI_MODEL", "gemini-3.7-flash"),
 		GeminiSystemPrompt:    getEnv("GEMINI_SYSTEM_PROMPT", "You are a professional and friendly customer service assistant. Answer customer questions accurately based on the provided knowledge base. Be concise, helpful, and polite. Reply in the same language the customer uses. If you cannot find the answer in the knowledge base, politely let the customer know and suggest they contact a human agent for further assistance. Never make up information."),
 		MatchScoreThreshold:   getEnvFloat("MATCH_SCORE_THRESHOLD", 0.3),
 		FrontendURL:           getEnv("FRONTEND_URL", "http://localhost:5173"),
