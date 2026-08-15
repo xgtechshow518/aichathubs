@@ -36,7 +36,7 @@ turns on the moment you add its key.
 | | |
 |---|---|
 | **Frontend** | React 19 · TypeScript · Vite 7 · Ant Design · Zustand · Axios |
-| **Backend** | Go 1.25 · Echo v4 · GORM · JWT · WebSocket |
+| **Backend** | Go 1.26 · Echo v4 · GORM · JWT · WebSocket |
 | **Database** | PostgreSQL 16 (`pg_trgm` extension) |
 | **AI** | Google Gemini (`gemini-2.5-flash` by default) |
 | **WhatsApp** | whatsmeow (session store in SQLite) |
@@ -159,7 +159,7 @@ which login buttons to show.
 ## Manual setup (without Docker)
 
 <details>
-<summary>Prerequisites: Go 1.25+, Node.js 20+, PostgreSQL 16+</summary>
+<summary>Prerequisites: Go 1.26+, Node.js 20+, PostgreSQL 16+</summary>
 
 **Database**
 
