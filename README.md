@@ -9,9 +9,6 @@ credentials: nothing is hardcoded, and the app runs happily with only a
 database configured — every integration (AI, email, social login, billing)
 turns on the moment you add its key.
 
----
-
-
 > **Heads up:** this repo ships **no secrets**. Every deployment supplies its
 > own keys via `.env` files (git-ignored). See [Configuration](#configuration).
 
@@ -88,6 +85,16 @@ containers: `aichathubs-db`, `aichathubs-backend`, `aichathubs-frontend`.
 
 Stop with `Ctrl+C`, or `docker compose down` (add `-v` to also wipe the
 database and WhatsApp session volumes).
+
+### First login
+
+- **App account** — open the frontend and **register**. With no SMTP configured
+  (the default), new signups are **auto-verified**, so you're logged into the
+  dashboard immediately. There is no pre-seeded user.
+- **Admin panel** — go to `/admin/login`. Credentials come from `backend/.env`;
+  the built-in defaults are **`admin` / `admin123456`** (`ADMIN_USERNAME` /
+  `ADMIN_PASSWORD`). **Change them before exposing the server** — the backend
+  prints a warning at startup while they're still default.
 
 ### Ports already in use?
 
@@ -169,7 +176,7 @@ which login buttons to show.
 ## Manual setup (without Docker)
 
 <details>
-<summary>Prerequisites: Go 1.26+, Node.js 20+, PostgreSQL 16+</summary>
+<summary>Prerequisites: Go 1.26+, Node.js 20.19+ (or 22.12+), PostgreSQL 16+</summary>
 
 **Database**
 
