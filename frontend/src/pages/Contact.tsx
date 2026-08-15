@@ -1,8 +1,8 @@
 import StaticPageLayout from '../components/StaticPageLayout';
 
 const contacts = [
-  { icon: '✉️', title: 'Email Support', desc: 'Get a response within 24 hours.', detail: 'hello@aichatshub.com' },
-  { icon: '🐛', title: 'Bug Reports', desc: 'Found an issue? Let us know.', detail: 'hello@aichatshub.com' },
+  { icon: '✉️', title: 'Email Support', desc: 'Get a response within 24 hours.', detail: 'hello@awkiss.com' },
+  { icon: '🐛', title: 'Bug Reports', desc: 'Found an issue? Let us know.', detail: 'hello@awkiss.com' },
 ];
 
 export default function Contact() {
@@ -31,7 +31,7 @@ export default function Contact() {
       <h2>General Inquiries</h2>
       <p>
         For partnerships, press inquiries, or anything else, email us at{' '}
-        <a href="mailto:hello@aichatshub.com">hello@aichatshub.com</a>.
+        <a href="mailto:hello@awkiss.com">hello@awkiss.com</a>.
         We typically respond within one business day.
       </p>
     </StaticPageLayout>

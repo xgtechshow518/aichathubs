@@ -97,7 +97,7 @@ export default function Terms() {
       <h2>12. Contact</h2>
       <p>
         If you have questions about these Terms, please contact us at{' '}
-        <a href="mailto:hello@aichatshub.com">hello@aichatshub.com</a>.
+        <a href="mailto:hello@awkiss.com">hello@awkiss.com</a>.
       </p>
     </StaticPageLayout>
   );

@@ -80,7 +80,7 @@ export default function Privacy() {
       </ul>
       <p>
         To exercise these rights, contact us at{' '}
-        <a href="mailto:hello@aichatshub.com">hello@aichatshub.com</a>.
+        <a href="mailto:hello@awkiss.com">hello@awkiss.com</a>.
       </p>
 
       <h2>7. Cookies</h2>
@@ -105,7 +105,7 @@ export default function Privacy() {
       <h2>10. Contact</h2>
       <p>
         If you have questions about this Privacy Policy, please contact us at{' '}
-        <a href="mailto:hello@aichatshub.com">hello@aichatshub.com</a>.
+        <a href="mailto:hello@awkiss.com">hello@awkiss.com</a>.
       </p>
     </StaticPageLayout>
   );
